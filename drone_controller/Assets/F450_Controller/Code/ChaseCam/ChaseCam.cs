@@ -1,20 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace F450 {
-  public class ChaseCam : MonoBehaviour {
-    [Header("Chase camera properties")]
-    [SerializeField] private Transform _target;
-    [SerializeField] private float _smoothSeed = 0.125f;
-    [SerializeField] private Vector3 offset = new Vector3(-0.78f, 0.54f, -0.12f);
+public class ChaseCam : MonoBehaviour
+{
+    public GameObject FollowCar  = null;
+    public float FollowSpeed = 3.0f;
+    private Transform FollowPos = null;
 
-    void FixedUpdate() {
-      Vector3 desiredPosition = _target.position + offset;
-      Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, _smoothSeed);
-      transform.position = smoothedPosition;
-      transform.LookAt(_target);
+    private void Start()
+    {
+        FollowPos = GetChildTransformByName(FollowCar, "FollowPos");
     }
-  }
+    private void LateUpdate()
+    {
+        this.transform.LookAt(FollowCar.transform);
+        this.transform.position = Vector3.Lerp(this.transform.position, FollowPos.transform.position, Time.deltaTime * FollowSpeed);
+    }       
+    private Transform GetChildTransformByName(GameObject parent, string childname)
+    {
+        for (int i = 0; i < parent.transform.childCount; i++)
+        {
+            if (parent.transform.GetChild(i).name == childname)
+            {
+                return parent.transform.GetChild(i).gameObject.transform;
+            }
+        }
+        return null;
+    }
 }
-
