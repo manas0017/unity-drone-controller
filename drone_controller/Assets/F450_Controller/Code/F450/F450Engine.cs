@@ -12,7 +12,7 @@ namespace F450 {
     [SerializeField] private float _lerpSpeed = 2f;
 
     [Header("Propeller properties")]
-    [SerializeField] private Transform _propeller;
+    [SerializeField] public Transform _propeller;
     [SerializeField] private float _propellerRotationSpeed = 20f;
 
     private float _finalEngineForce;
